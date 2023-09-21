@@ -1,0 +1,54 @@
+<div class="my-form-container">
+      <%= form_for @event, html: {multipart: true} do |f| %>
+      <div class="field">
+      <%= f.label :title, class: "label" %>
+      <div class="control">
+        <%= f.text_field :title, class: "input", placeholder: "Title", required: true %>
+      </div>
+      <div class="form-group">
+        <%= f.label :public %>
+        <%= f.check_box :public, class: "switchery" %>
+      </div>
+    </div>
+    
+    <div class="field">
+      <%= f.label :description, class: "label" %>
+      <div class="control">
+        <%= f.text_area :description, class: "textarea", placeholder: "Description", required: true %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= f.label :init_date, class: "label" %>
+      <div class="control">
+        <%= f.date_select :init_date, class: "input", selected: Date.today, 
+        :start_year => Date.current.year, required: true %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= f.label :cost, class: "label" %>
+      <div class="control">
+        <%= f.number_field :cost, class: "input", required: true %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= f.label :location, class: "label" %>
+      <div class="control">
+        <%= f.text_field :location, class: "input", placeholder: "Location", required: true %>
+      </div>
+    </div>
+
+    <div class="field">
+      <%= f.label :image, class: "label" %>
+      <div class="control">
+        <%= f.file_field :image, class: "input" %>
+      </div>
+    </div>
+    
+    <%= f.submit "Save", class: "button is-primary" %>
+    <%= link_to "back", events_path, class:"button is-success is-pulled-right back-button" %>
+  <% end %>
+</div>
+

@@ -1,0 +1,92 @@
+<section class="hero is-link">
+  <div class="hero-body">
+    <% if user_signed_in? %>
+      <%= link_to "Log Out", destroy_user_session_path, class: "button is-danger is-pulled-right back-button"%>
+      <%= link_to "Back", home_path, class:"button is-warning is-pulled-right back-button" %>
+      <%= link_to "Public Events", public_events_path, class: "button is-success is-pulled-right back-button"%>
+      <%= link_to "Add Event", new_event_path, class:"button is-success is-pulled-right" %>
+    <%end%>
+    <h1 class="title">
+      BrightCoders Events 
+    </h1>
+  </div>
+</section>
+
+<div class="filter-content">
+  <div>
+    <h2>Filter Events</h2>
+    <%= form_tag events_path, method: :get do %>
+      <label>
+        <%= check_box_tag :public_events, '1', params[:public_events] == '1' %>
+        Public Events
+      </label>
+      <label>
+        <%= check_box_tag :private_events, '1', params[:private_events] == '1' %>
+        Private Events
+      </label>
+  </div>
+
+  <div>
+    <p class='filter-tag'>Specific Date:</p>
+      <%= date_field_tag :specific_date, params[:specific_date] %>
+  </div>
+  <div>
+      <p class='filter-tag'>Date Range:</p>
+      <%= label_tag 'Start Date' %>
+      <%= date_field_tag :start_date, params[:start_date] %>
+      <%= label_tag 'End Date' %>
+      <%= date_field_tag :end_date, params[:end_date] %>
+  </div>
+  <div>
+    <%= submit_tag 'Filter' %>
+  </div>
+  <% end %>
+  <div>
+    <%= link_to "Export CSV", events_export_path(public_events: params[:public_events], private_events: params[:private_events], specific_date: params[:specific_date], start_date: params[:start_date], end_date: params[:end_date], format: :csv) %>
+
+  </div>
+</div>
+
+<% if @error_message %>
+  <div class="error-message">
+    <p><%= @error_message %></p>
+  </div>
+  <% else %>
+  <div class="card-columns">
+    <% @events.each do |event| %>
+      <div class="card">
+      <header class="card-header">
+          <p class="card-header-title">
+            <%= event.title %>
+          </p>
+        </header>
+
+        <div class="card-content">
+          <%= image_tag event.image, class: "event-image" unless event.image.blank? %>
+
+          <div class="content">
+            <p class="content-tag">Description:</p>  
+            <%= event.description %>
+            
+            <p class="content-tag">Initial Date:</p>
+            <%= event.init_date %>
+
+            <p class="content-tag">Cost:</p>
+            <%= event.cost %>
+
+            <p class="content-tag">Location:</p>
+            <%= event.location %>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <%= link_to "edit", edit_event_path(event.id), class:"card-footer-item" %>
+          <%= link_to "delete", delete_path(event.id), class:"card-footer-item" %>
+        </footer>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="paginate"> 
+  <%= paginate @events%>
+</div>
